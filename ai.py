@@ -16,7 +16,6 @@ from utils import extract_bard_cookie, extract_claude_cookie
 
 MODELS = ["bard", "bing", "gpt", "hugchat", "llama", "claude"]
 
-
 class ChatHistory:
     def __init__(self, msg_limit):
         self.stack = deque(maxlen=msg_limit)
