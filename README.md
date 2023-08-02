@@ -86,30 +86,30 @@ pong
 10. if you don't want to see all the logs across all chat rooms your signal account is tied to you can modify the produce function inside the signal bot library. This modification will only show you logs for signal rooms your bot is listening in. 
 
 ```
-    async def _produce(self, name: int) -> None:
-        logging.info(f"[Bot] Producer #{name} started")
-        try:
-            async for raw_message in self._signal.receive():
-                # Parse the raw_message into a dictionary
-                message_dict = json.loads(raw_message)
+async def _produce(self, name: int) -> None:
+    logging.info(f"[Bot] Producer #{name} started")
+    try:
+        async for raw_message in self._signal.receive():
+            # Parse the raw_message into a dictionary
+            message_dict = json.loads(raw_message)
 
-                # Skip processing of receipt messages
-                if 'receiptMessage' in message_dict.get('envelope', {}):
-                    continue
+            # Skip processing of receipt messages
+            if 'receiptMessage' in message_dict.get('envelope', {}):
+                continue
 
-                try:
-                    message = Message.parse(raw_message)
-                except UnknownMessageFormatError:
-                    continue
+            try:
+                message = Message.parse(raw_message)
+            except UnknownMessageFormatError:
+                continue
 
-                # Check if the message is from the group chat you're interested in
-                if self._is_group_id(message.group) and self._is_internal_id(message.group):
-                    logging.info(f"[Raw Message] {raw_message}")
+            # Check if the message is from the group chat you're interested in
+            if self._is_group_id(message.group) and self._is_internal_id(message.group):
+                logging.info(f"[Raw Message] {raw_message}")
 
-                if not self._should_react(message):
-                    continue
+            if not self._should_react(message):
+                continue
 
-                await self._ask_commands_to_handle(message)
+            await self._ask_commands_to_handle(message)
 ```
 
 ## Example Commands
