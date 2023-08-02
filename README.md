@@ -1,6 +1,12 @@
 # Signalbot Example
 
-An example bot for Signal that uses the [signalbot](https://github.com/filipre/signalbot) Python package.
+An example bot for Signal that uses the [signalbot](https://github.com/filipre/signalbot) Python package. With LLM integration insprired by https://github.com/cycneuramus/signal-aichat 
+
+Big thanks to the following reversed engineered API libraries for hugchat, bard, bing, and claude. 
+https://github.com/Soulter/hugging-chat-api
+https://github.com/acheong08/Bard
+https://github.com/AshwinPathi/claude-api-py
+https://github.com/acheong08/EdgeGPT
 
 ## Getting Started
 
@@ -32,7 +38,7 @@ time="2022-03-07T13:02:22Z" level=info msg="Found number +491234567890 and added
 time="2022-03-07T13:02:24Z" level=info msg="Started Signal Messenger REST API"
 ```
 
-6. The bot needs to listen to a group. Use the following snippet to get a group's `id` and `internal_id`:
+6. The bot needs to listen to a group. Use the following snippet to get a group's `id` and `internal_id` the output of the below command needs to go in groups.json:
 ```bash
 curl -X GET 'http://127.0.0.1:8080/v1/groups/+49123456789' | python -m json.tool
 ```
@@ -77,6 +83,51 @@ INFO:root:[Bot] New message 1646000000000 sent:
 pong
 ```
 
+10. if you don't want to see all the logs across all chat rooms your signal account is tied to you can modify the produce function inside the signal bot library. This modification will only show you logs for signal rooms your bot is listening in. 
+
+```
+    async def _produce(self, name: int) -> None:
+        logging.info(f"[Bot] Producer #{name} started")
+        try:
+            async for raw_message in self._signal.receive():
+                # Parse the raw_message into a dictionary
+                message_dict = json.loads(raw_message)
+
+                # Skip processing of receipt messages
+                if 'receiptMessage' in message_dict.get('envelope', {}):
+                    continue
+
+                try:
+                    message = Message.parse(raw_message)
+                except UnknownMessageFormatError:
+                    continue
+
+                # Check if the message is from the group chat you're interested in
+                if self._is_group_id(message.group) and self._is_internal_id(message.group):
+                    logging.info(f"[Raw Message] {raw_message}")
+
+                if not self._should_react(message):
+                    continue
+
+                await self._ask_commands_to_handle(message)
+```
+
 ## Example Commands
 
-*Todo*
+!hugchat (requires cookies file in a json format see config folder.)
+!bard we (are using browser_cookie3 here https://github.com/borisbabic/browser_cookie3)
+!claude (we are using browser_cookie3 here https://github.com/borisbabic/browser_cookie3)
+!bingchat (requires cookies file in a json format see config folder.)
+
+11. Shoutout to @cycneuramus for ai.py https://github.com/cycneuramus/signal-aichat had to make some slight modifications to the bard class to keep it from crashing some weird async stuff was happening... below 
+
+```
+loop = asyncio.get_event_loop()
+class BardAPI:
+    def __init__(self, token, secure_1psidts):
+        #self.chat = Bard(token, secure_1psidts)
+        
+        self.chat = loop.run_until_complete(AsyncChatbot.create(token, secure_1psidts))
+        #self.chat = asyncio.run(AsyncChatbot.create(token, secure_1psidts))
+```
+TODO move everything back to env variables and use either os or python-dotenv module

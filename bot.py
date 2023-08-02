@@ -1,17 +1,20 @@
-import os
+#import os
 from signalbot import SignalBot
-from commands import PingCommand, FridayCommand, TypingCommand, TriggeredCommand
+from commands import PingCommand, FridayCommand, TypingCommand, TriggeredCommand, BardCommand, LlamaCommand, ClaudeCommand, BingCommand
 import logging
+from utils import get_group_info
 
 logging.getLogger().setLevel(logging.INFO)
 logging.getLogger("apscheduler").setLevel(logging.WARNING)
 
 
+group_name = 'test'
+
 def main():
-    signal_service = os.environ["SIGNAL_SERVICE"]
-    phone_number = os.environ["PHONE_NUMBER"]
-    group_id = os.environ["GROUP_ID"]
-    internal_id = os.environ["GROUP_INTERNAL_ID"]
+
+    signal_service = '127.0.0.1:8080'
+    phone_number = '+phonenumber'
+    group_id, internal_id = get_group_info(group_name)
 
     config = {
         "signal_service": signal_service,
@@ -26,6 +29,10 @@ def main():
     bot.register(FridayCommand())
     bot.register(TypingCommand())
     bot.register(TriggeredCommand())
+    bot.register(LlamaCommand())
+    bot.register(ClaudeCommand())
+    bot.register(BardCommand())
+    bot.register(BingCommand())
 
     bot.start()
 

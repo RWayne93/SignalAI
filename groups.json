@@ -1,0 +1,17 @@
+[
+    {
+        "name": "test",
+        "id": "group.randomstringidhere",
+        "internal_id": "random alphanumeric string here",
+        "members": [
+            "+PHONE_NUMBER"
+        ],
+        "blocked": false,
+        "pending_invites": [],
+        "pending_requests": [],
+        "invite_link": "invite link here",
+        "admins": [
+            "+PHONE_NUMBER"
+        ]
+    }
+]
