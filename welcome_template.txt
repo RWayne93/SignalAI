@@ -1,0 +1,11 @@
+Welcome {username} to the IrregularChat! Before participating, we recommend muting the chat and checking in periodically, as the conversation can be overwhelming for some, and users may be in different time zones.
+
+A lot of resources, guides, and discussions have already been posted, and you can find them at: https://wiki.irregularchat.com
+
+You can use the single sign-on to access other hosted resources using this signup link: https://url.irregularchat.com/sso-invite 
+
+- Such as the Wiki, GitLab, Kasam Virtual Environment, Matrix Server, Nextcloud, etc
+
+Please take a moment to look through the user list and introduce yourself to the group. 
+
+Let us know what tech training, interests, and projects you have, and feel free to self-promote during your introduction.
