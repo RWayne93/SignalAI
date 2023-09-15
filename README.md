@@ -85,7 +85,7 @@ pong
 
 10. if you don't want to see all the logs across all chat rooms your signal account is tied to you can modify the produce function inside the signal bot library. This modification will only show you logs for signal rooms your bot is listening in. 
 
-```
+```python
 async def _produce(self, name: int) -> None:
     logging.info(f"[Bot] Producer #{name} started")
     try:
